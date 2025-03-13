@@ -1,20 +1,20 @@
-# ImagoAI Assignment
+# 🚀 ImagoAI Assignment
 
-## Project Architecture:
+## 🏗️ Project Architecture:
 
 ![Project Architecture](assets/architecture.svg)
 
-## Problem Statement
+## 📌 Problem Statement
 You are provided with a compact hyperspectral dataset containing spectral reflectance data from corn samples across multiple wavelength bands.
 
-## Objective
+## 🎯 Objective
 This assignment assesses your ability to process hyperspectral imaging data, perform dimensionality reduction, and develop a machine learning model to predict mycotoxin levels (e.g., DON concentration) in corn samples.
 
 
-## Project Overview
+## 📜 Project Overview
 This project implements various machine learning and deep learning models to analyze and predict outcomes based on structured data. The workflow includes data preprocessing, dimensionality reduction, model training, evaluation, and deployment using MLOps tools.
 
-## Tools and Technologies Used
+## 🛠️ Tools and Technologies Used
 - **Programming & ML/DL**: Python, Machine Learning, Deep Learning (CNN, MLP, LSTM)
 - **MLOps**:
   - **ZenML**: Data pipeline, artifact management, and orchestration
@@ -22,7 +22,7 @@ This project implements various machine learning and deep learning models to ana
 - **UI Framework**:
   - **Streamlit**: For building interactive user interfaces
 
-## Repository Structure
+## 📂 Repository Structure
 ```
 ImagoAI_Assignment/
 |│──.zen/
@@ -66,7 +66,7 @@ ImagoAI_Assignment/
 │── requirements.txt                       # List of dependencies
 ```
 
-## Installation
+## ⚙️ Installation
 To set up the environment and install dependencies, follow these steps:
 ```bash
 mkdir ImagoAI_Assignment
@@ -91,40 +91,40 @@ streamlit run app.py
 python3 run_pipeline.py
 ```
 
-we visuliaze the dash board like below and you can track the experiment using mlflow 
+we visuliaze the dash board like below and you can track the experiment using mlflow 📊
 
-#### Data pipeline 
+#### Data pipeline 🏗️
 
 ![zenml image](assets/zenml_1.png)
 
 
 
-#### Experiment Tracking 
+####  📈 Experiment Tracking 
 
 ![mlflow image](assets/mlflow_3.png)
 
-#### Model Metric Tracking
+#### 📊 Model Metric Tracking
 
 ![mlflow image](assets/mlflow_4.png)
 
 
-#### Continious Deployment Pipeline
+#### 🔄 Continious Deployment Pipeline
 
 ![zenml_image_2](assets/zenml_2.png)
 
 
-#### Inference Pipeline 
+#### 🤖 Inference Pipeline 
 
 ![zenml image_3](assets/zenml_3.png)
 
 
-## Data Preprocessing
+## 🧹 Data Preprocessing
 - Dropped unwanted columns (e.g., `hsi_id`)
 - Removed outliers using IQR method
 - Applied standard scaling or MinMax scaling
 - Performed dimensionality reduction using PCA or t-SNE
 
-## Model Training
+## 🤖 Model Training
 Implemented and evaluated the following machine learning models:
 - **Linear Regression**
 - **AdaBoost Regressor**
@@ -134,12 +134,12 @@ Implemented and evaluated the following machine learning models:
 - **Random Forest Regressor**
 
 **Neural Networks** 
-- **CNN**
-- **LSTM**
-- **MLP**
+- **CNN 🧠**
+- **LSTM 🔄**
+- **MLP 🔗**
 
 
-## Model Evaluation
+## 📊 Model Evaluation for PCA
 Performance of models with PCA 
 | Model                  | MAE  | RMSE  | R² Score | Hyperparameter tuning|
 |------------------------|------|------|---------|------------------------|
@@ -153,11 +153,104 @@ Performance of models with PCA
 | Decision Tree         | 2425.4945 | 4744.5240 | 0.8690  | True
 | Decision Tree         |  2828.9126 | 6559.6708 |0.7513 | False
 
-## Future Improvements
+## 📊 Model Evaluation for TSNE with n_components = 2, perplexity = 30 ,learning_rate=200
+
+Performance of models with T-SNE
+| Model                  | MAE  | RMSE  | R² Score | Hyperparameter tuning|
+|------------------------|------|------|---------|------------------------|
+| Linear Regression     |  4178.4700, | 12800.1561, | 0.0464 | False |
+| Gradient Boosting     | 218.8093  | 1446.0560,  |  0.9878 | True |
+| Gradient Boosting     | 393.1157  | 2399.2303  | 0.9404  | Flase |
+| AdaBoost              | 380.3744  |475.0693, |  0.9987   | False |
+| AdaBoost              | 234.423  | 350.675 | 0.9954   | True |
+| Random Forest         | 543.5287 | 2817.4974, |0.8567 | False
+| Random Forest         | 468.8764 | 1678.6574| 0.9538  | True
+| Decision Tree         | 2425.4945 | 4744.5240 | 0.7390  | True
+| Decision Tree         |  917.9780 | 8430.9100 |0.5863| False
+
+
+# 📊 Model Performance Analysis
+
+## **1️⃣ Best Performing Models 🏆**
+Based on **MAE, RMSE, and R² Score**, the **top-performing models** are:
+
+- **T-SNE + AdaBoost (Hyperparameter Tuned)**
+  - **MAE**: 234.423
+  - **RMSE**: 350.675
+  - **R² Score**: **0.9954** ✅ (Best R² Score)
+  
+- **T-SNE + Gradient Boosting (Hyperparameter Tuned)**
+  - **MAE**: 218.8093
+  - **RMSE**: 1446.0560
+  - **R² Score**: **0.9878** ✅
+  
+- **T-SNE + AdaBoost (No Hyperparameter Tuning)**
+  - **MAE**: 380.3744
+  - **RMSE**: 475.0693
+  - **R² Score**: **0.9987** ✅ (Best RMSE)
+
+👉 **Overall Best Model: T-SNE + AdaBoost (No Hyperparameter Tuning)**  
+This model achieved the lowest **MAE, RMSE, and highest R² Score**.
+
+---
+
+## **2️⃣ Worst Performing Models 🚨**
+The **worst models** based on **high MAE, RMSE, and low R² Score** are:
+
+- **PCA + Linear Regression**
+  - **MAE**: 4381.5374 🚨 (Worst MAE)
+  - **RMSE**: 12199.1782 🚨
+  - **R² Score**: **0.1339** ❌
+  
+- **T-SNE + Linear Regression**
+  - **MAE**: 4178.4700
+  - **RMSE**: 12800.1561 🚨 (Worst RMSE)
+  - **R² Score**: **0.0464** ❌ (Lowest R² Score)
+
+👉 **Overall Worst Model: T-SNE + Linear Regression**  
+This model performed the worst with the highest **error and lowest R² Score**.
+
+---
+
+## **3️⃣ Key Insights & Future Improvements**
+### **🔹 Issue: Dataset Size is Small (499,450)**
+- **High-Dimensionality (450 Features)**: PCA and T-SNE help, but **more data** would improve model generalization.
+- **Imbalanced Data?**: Check if the dataset has class imbalance; consider **SMOTE** or **data augmentation**.
+
+### **🔹 Feature Selection & Engineering**
+- Use **Lasso Regression** or **SHAP Values** to identify important features.
+- **Try reducing the feature set** before applying PCA/T-SNE.
+
+### **🔹 Hyperparameter Tuning**
+- **Tuning significantly improves performance** (seen in Random Forest, AdaBoost, and Gradient Boosting).
+- Use **GridSearchCV** or **Bayesian Optimization**.
+
+### **🔹 Explore Alternative Dimensionality Reduction**
+- Instead of **T-SNE**, try **UMAP** (better for high-dimensional structured data).
+- **Autoencoders** (Deep Learning) could help extract better features.
+
+### **🔹 Model Selection & Ensemble Methods**
+- **Use Voting or Stacking Ensemble** (combine Gradient Boosting, AdaBoost, and Random Forest).
+- **Avoid Linear Regression** (consistently poor results).
+
+---
+
+## **4️⃣ Next Steps 🚀**
+1. **Collect More Data** – At least **5x** more samples (2500+ observations).
+2. **Feature Engineering** – Reduce unnecessary features, focus on **important predictors**.
+3. **Optimize Hyperparameters** – Fine-tune **AdaBoost & Gradient Boosting** further.
+4. **Try Deep Learning** – Use an **MLP with Dropout & BatchNorm**.
+5. **Test Different Dimensionality Reduction** – Experiment with **UMAP, Autoencoders**.
+6. **Use Model Explainability** – SHAP values to understand feature importance.
+
+📌 **Final Recommendation:**  
+For now, **T-SNE + AdaBoost** performs best. **Focus on collecting more data, tuning hyperparameters, and trying alternative feature selection techniques.**
+
+## 🌟 Future Improvements
 - Optimize hyperparameters for better performance
 - Explore deep learning models for enhanced prediction
 - Improve data preprocessing techniques
 - Deploy model using cloud services
 
 ---
-**Contributors**: R. Sarath Kumar
+**👨‍💻 Contributors**: R. Sarath Kumar
