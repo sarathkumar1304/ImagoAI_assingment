@@ -140,13 +140,18 @@ Implemented and evaluated the following machine learning models:
 
 
 ## Model Evaluation
-Performance of models with PCA & t-SNE:
-| Model                  | MAE  | RMSE  | R² Score |
-|------------------------|------|------|---------|
-| Gradient Boosting     | 529  | 687  | 96.4%   |
-| AdaBoost              | 600  | 1544 | 94.97   |
-| Random Forest         | 700  | 3067 | 93.7  |
-| Decision Tree         | 529  | 687  | 92.7  |
+Performance of models with PCA 
+| Model                  | MAE  | RMSE  | R² Score | Hyperparameter tuning|
+|------------------------|------|------|---------|------------------------|
+| Linear Regression     | 4381.5374 | 12199.1782 | 0.1339 | False |
+| Gradient Boosting     | 1676.1835  | 3187.7030  | 0.9409  | True |
+| Gradient Boosting     | 1693.1157  | 3199.2303  | 0.9404  | Flase |
+| AdaBoost              | 2582.4436  | 3606.7034 | 0.9243   | False |
+| AdaBoost              | 2345.4234  | 3506.6750 | 0.9354   | True |
+| Random Forest         | 2828.9126 | 6539.6708 |0.7511 | False
+| Random Forest         | 2687.8764 | 5678.6574| 0.8634  | True
+| Decision Tree         | 2425.4945 | 4744.5240 | 0.8690  | True
+| Decision Tree         |  2828.9126 | 6559.6708 |0.7513 | False
 
 ## Future Improvements
 - Optimize hyperparameters for better performance
