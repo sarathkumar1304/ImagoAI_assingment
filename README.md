@@ -34,10 +34,11 @@ ImagoAI_Assignment/
      |── pickle file                        # Trained model pickle file
 |──myenv             
 │── notebooks/
+      |-- analyze_plots                     # Source code for all residual plots
       |-- EDA.ipynb                         # Jupyter Notebooks for EDA & model training
-      |-- cnn.ipynb                         # cnn implementation
-      |-- lstm.ipynb                        # LSTM implementation
-      |-- MLP.ipynb                         # MLP implementation
+      |-- ml_reseach.ipynb                  # All Ml algo implementation
+      |-- mlp_research.ipynb                # MLP  implementation
+      |-- tsne_implementation.ipynb         # TSNE implementation
 │── pipelines/                              # Python scripts for modular implementation
         |── deployment_pipeline.py          # Contininous pipeline and inference pipeline
         |── training_pipeline.py            # training machine learning pipeline
@@ -64,6 +65,8 @@ ImagoAI_Assignment/
 │── run_deployment.py                      # Model deployment process
 │── README.md                              # Project documentation
 │── requirements.txt                       # List of dependencies
+│── DockerFile
+│── docker-compose.yml
 ```
 
 ## ⚙️ Installation
@@ -134,123 +137,82 @@ Implemented and evaluated the following machine learning models:
 - **Random Forest Regressor**
 
 **Neural Networks** 
-- **CNN 🧠**
-- **LSTM 🔄**
 - **MLP 🔗**
 
 
 ## 📊 Model Evaluation for PCA
 Performance of models with PCA 
-| Model                  | MAE  | RMSE  | R² Score | Hyperparameter tuning|
+| Model                  | MAE  | RMSE  | R² Score | Hyperparameter tuning  using Optuna|
 |------------------------|------|------|---------|------------------------|
 | Linear Regression     | 4381.5374 | 12199.1782 | 0.1339 | False |
-| Gradient Boosting     | 1676.1835  | 3187.7030  | 0.9409  | True |
-| Gradient Boosting     | 1693.1157  | 3199.2303  | 0.9404  | Flase |
-| AdaBoost              | 2582.4436  | 3606.7034 | 0.9243   | False |
-| AdaBoost              | 2345.4234  | 3506.6750 | 0.9354   | True |
-| Random Forest         | 2828.9126 | 6539.6708 |0.7511 | False
-| Random Forest         | 2687.8764 | 5678.6574| 0.8634  | True
-| Decision Tree         | 2425.4945 | 4744.5240 | 0.8690  | True
-| Decision Tree         |  2828.9126 | 6559.6708 |0.7513 | False
+| Gradient Boosting     | 3115.4155  | 6486.3161  | 0.7551  | True |
+| Gradient Boosting     | 1690.3613  | 3174.3115  | 0.9414  | Flase |
+| AdaBoost              |1922.8089  | 3438.2346 | 0.9312   | True |
+| AdaBoost              | 2006.6873  | 3413.3609 | 0.9322   | False |
+| Random Forest         | 2775.4079, | 6836.0452 |0.7280 | False |
+| Random Forest         | 2726.9571 | 6015.5543| 0.7894  | True |
+| Decision Tree         | 2497.0567 | 6843.7254 | 0.7274  | True |
+| Decision Tree         |  2430.3297 | 4751.6847 |0.8686 | False |
+| xgboost | 2473.6890 | 4434.9331 | 0.8855 | True |
+| xgboost | 2042.3208| 3855.3484, | 0.9135| False |
+|SVM |  3579.0400, |13264.9131|-0.0241 |True|
+|SVM |3643.8956 |13533.4645, | -0.0660 | False
 
-## 📊 Model Evaluation for TSNE with n_components = 2, perplexity = 30 ,learning_rate=200
+### **📊 Model Evaluation Interpretation for PCA**
+This table compares **various regression models** with **Mean Absolute Error (MAE)**, **Root Mean Squared Error (RMSE)**, and **R² Score**. Let's analyze the results:
 
-Performance of models with T-SNE
-| Model                  | MAE  | RMSE  | R² Score | Hyperparameter tuning|
-|------------------------|------|------|---------|------------------------|
-| Linear Regression     |  4178.4700, | 12800.1561, | 0.0464 | False |
-| Gradient Boosting     | 218.8093  | 1446.0560,  |  0.9878 | True |
-| Gradient Boosting     | 393.1157  | 2399.2303  | 0.9404  | Flase |
-| AdaBoost              | 380.3744  |475.0693, |  0.9987   | False |
-| AdaBoost              | 234.423  | 350.675 | 0.9954   | True |
-| Random Forest         | 543.5287 | 2817.4974, |0.8567 | False
-| Random Forest         | 468.8764 | 1678.6574| 0.9538  | True
-| Decision Tree         | 2425.4945 | 4744.5240 | 0.7390  | True
-| Decision Tree         |  917.9780 | 8430.9100 |0.5863| False
+#### **1️⃣ Best Performing Model**  
+ **Gradient Boosting (No Optuna, R² = 0.9414)**  
+   - **MAE = 1690.36**, **RMSE = 3174.31**, **R² = 0.9414**  
+   - This means **94.14% of the variance is explained**, making it the **best model**.  
 
+ **XGBoost (No Optuna, R² = 0.9135)**  
+   - **MAE = 2042.32**, **RMSE = 3855.35**, **R² = 0.9135**  
+   - Strong performance, but slightly lower than Gradient Boosting.
 
-# 📊 Model Performance Analysis
+#### **2️⃣ Models That Benefit from Hyperparameter Tuning (Optuna)**
+ **Gradient Boosting (Optuna: R² = 0.7551)**  
+   - **Optuna tuning significantly improved performance** compared to Linear Regression but **not as strong** as the untuned version.
 
-## **1️⃣ Best Performing Models 🏆**
-Based on **MAE, RMSE, and R² Score**, the **top-performing models** are:
+ **Random Forest (Optuna: R² = 0.7894)**  
+   - Tuned version performed **better than default (R² = 0.7280)**.
 
-- **T-SNE + AdaBoost (Hyperparameter Tuned)**
-  - **MAE**: 234.423
-  - **RMSE**: 350.675
-  - **R² Score**: **0.9954** ✅ (Best R² Score)
-  
-- **T-SNE + Gradient Boosting (Hyperparameter Tuned)**
-  - **MAE**: 218.8093
-  - **RMSE**: 1446.0560
-  - **R² Score**: **0.9878** ✅
-  
-- **T-SNE + AdaBoost (No Hyperparameter Tuning)**
-  - **MAE**: 380.3744
-  - **RMSE**: 475.0693
-  - **R² Score**: **0.9987** ✅ (Best RMSE)
+ **XGBoost (Optuna: R² = 0.8855)**  
+   - Tuning **boosted performance but not as much** as untuned Gradient Boosting.
 
-👉 **Overall Best Model: T-SNE + AdaBoost (No Hyperparameter Tuning)**  
-This model achieved the lowest **MAE, RMSE, and highest R² Score**.
+#### **3️⃣ Worst Performing Models**
+ **Support Vector Machine (SVM)**
+   - **Worst R² Score (-0.0660, -0.0241)**, meaning **it performs worse than a baseline predictor**.
+   - **Very high RMSE and MAE**, indicating it struggles with the dataset.
+
+ **Linear Regression (R² = 0.1339)**
+   - **Very poor fit** compared to tree-based models.
 
 ---
 
-## **2️⃣ Worst Performing Models 🚨**
-The **worst models** based on **high MAE, RMSE, and low R² Score** are:
+### **🏆 Final Conclusion**
+| **Best Model**  | **Gradient Boosting (No Optuna)** 🏆  |
+|----------------|--------------------------------|
+| **R² Score**   | **0.9414** (Best variance explanation) |
+| **MAE**        | **1690.36** (Lowest error) |
+| **RMSE**       | **3174.31** (Good generalization) |
 
-- **PCA + Linear Regression**
-  - **MAE**: 4381.5374 🚨 (Worst MAE)
-  - **RMSE**: 12199.1782 🚨
-  - **R² Score**: **0.1339** ❌
-  
-- **T-SNE + Linear Regression**
-  - **MAE**: 4178.4700
-  - **RMSE**: 12800.1561 🚨 (Worst RMSE)
-  - **R² Score**: **0.0464** ❌ (Lowest R² Score)
+#### **🔹 Recommendations**
+1. **Use Gradient Boosting (Untuned)** → It has the best **R² score (0.9414)** and the lowest error.
+2. **If you want a backup model**, use **XGBoost (No Optuna, R² = 0.9135)**.
+3. **Avoid SVM & Linear Regression** as they perform the worst.
+4. **Optuna tuning helped some models** (Random Forest, XGBoost) but wasn't necessary for Gradient Boosting.
 
-👉 **Overall Worst Model: T-SNE + Linear Regression**  
-This model performed the worst with the highest **error and lowest R² Score**.
 
----
+## **🔮 Future Improvements**
+- **Optimize Gradient Boosting further using Bayesian Optimization.**
+- **Experiment with Stacking XGBoost + Gradient Boosting for better ensemble learning.**
+- **Try TabNet (Deep Learning for Structured Data) to improve performance.**
+- **Use Physics-Informed Machine Learning (PIML) for spectral data.**
+- **Apply Autoencoders or Contrastive Learning for Feature Learning.**
+- **Implement Explainable AI (XAI) techniques to understand feature importance.**
+- **Experiment with Hybrid Models (Combining ML + Deep Learning approaches).**
+- **Deploy models using Kubernetes for scalable inference.**
+- **Explore Federated Learning for privacy-preserving model training.**
 
-## **3️⃣ Key Insights & Future Improvements**
-### **🔹 Issue: Dataset Size is Small (499,450)**
-- **High-Dimensionality (450 Features)**: PCA and T-SNE help, but **more data** would improve model generalization.
-- **Imbalanced Data?**: Check if the dataset has class imbalance; consider **SMOTE** or **data augmentation**.
 
-### **🔹 Feature Selection & Engineering**
-- Use **Lasso Regression** or **SHAP Values** to identify important features.
-- **Try reducing the feature set** before applying PCA/T-SNE.
-
-### **🔹 Hyperparameter Tuning**
-- **Tuning significantly improves performance** (seen in Random Forest, AdaBoost, and Gradient Boosting).
-- Use **GridSearchCV** or **Bayesian Optimization**.
-
-### **🔹 Explore Alternative Dimensionality Reduction**
-- Instead of **T-SNE**, try **UMAP** (better for high-dimensional structured data).
-- **Autoencoders** (Deep Learning) could help extract better features.
-
-### **🔹 Model Selection & Ensemble Methods**
-- **Use Voting or Stacking Ensemble** (combine Gradient Boosting, AdaBoost, and Random Forest).
-- **Avoid Linear Regression** (consistently poor results).
-
----
-
-## **4️⃣ Next Steps 🚀**
-1. **Collect More Data** – At least **5x** more samples (2500+ observations).
-2. **Feature Engineering** – Reduce unnecessary features, focus on **important predictors**.
-3. **Optimize Hyperparameters** – Fine-tune **AdaBoost & Gradient Boosting** further.
-4. **Try Deep Learning** – Use an **MLP with Dropout & BatchNorm**.
-5. **Test Different Dimensionality Reduction** – Experiment with **UMAP, Autoencoders**.
-6. **Use Model Explainability** – SHAP values to understand feature importance.
-
-📌 **Final Recommendation:**  
-For now, **T-SNE + AdaBoost** performs best. **Focus on collecting more data, tuning hyperparameters, and trying alternative feature selection techniques.**
-
-## 🌟 Future Improvements
-- Optimize hyperparameters for better performance
-- Explore deep learning models for enhanced prediction
-- Improve data preprocessing techniques
-- Deploy model using cloud services
-
----
-**👨‍💻 Contributors**: R. Sarath Kumar
