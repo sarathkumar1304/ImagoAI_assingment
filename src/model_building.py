@@ -88,7 +88,7 @@ class ModelBuilding:
             return self.random_forest(X_train, y_train)
         elif model_name == "adaboost":
             return self.ada_boost(X_train, y_train)
-        elif model_name == "gradient":
+        elif model_name == "gradient_boosting":
             return self.gradient_boosting(X_train, y_train)
         elif model_name == "xgboost":
             return self.xgboost(X_train, y_train)
