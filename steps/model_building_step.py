@@ -23,10 +23,14 @@ from zenml.client import Client
 from zenml import ArtifactConfig, step, save_artifact
 from zenml.enums import ArtifactType
 from typing import Annotated
+from zenml import Model
 
 experiment_tracker = Client().active_stack.experiment_tracker
-
-@step(enable_cache=False, experiment_tracker=experiment_tracker.name)
+model = Model(
+    name= "ImagoAI-ML-Model",
+    description = 'Model for predicting vomitoxin levels in corn samples'
+)
+@step(enable_cache=False, experiment_tracker=experiment_tracker.name,model=model)
 def model_building_step(
     model_name: str, 
     X_train: np.ndarray|pd.DataFrame, 
@@ -54,8 +58,7 @@ def model_building_step(
     }
     # mlflow.set_experiment(model_name)
     if not mlflow.active_run():
-
-        mlflow.start_run(run_name=model_name ,log_system_metrics=True)
+        mlflow.start_run()
     
     # Enable MLflow autologging
     mlflow.sklearn.autolog()
@@ -69,7 +72,8 @@ def model_building_step(
                 'min_samples_leaf': trial.suggest_int('min_samples_leaf', 1, 10),
             }
         elif model_name == "linear_regression":
-            param_grid = {}
+            # param_grid = {}
+            return 0
         elif model_name == "random_forest":
             param_grid = {
                 'n_estimators': trial.suggest_int('n_estimators', 50, 500),
@@ -134,22 +138,32 @@ def model_building_step(
         best_params = {}
 
     # valid_params = {k: v for k, v in best_params.items() if v is not None}
+    try:
 
-#  Initialize the final model with only valid parameters
-    final_model = model_mapping[model_name](**best_params)
-    # final_model = model_mapping[model_name](**best_params)
-    final_model.fit(X_train, y_train)
+    #  Initialize the final model with only valid parameters
+        final_model = model_mapping[model_name](**best_params)
+        # final_model = model_mapping[model_name](**best_params)
+        final_model.fit(X_train, y_train)
 
-    pipeline = Pipeline(steps=[("model", final_model)])
-    pipeline.fit(X_train, y_train)
+        pipeline = Pipeline(steps=[("model", final_model)])
+        pipeline.fit(X_train, y_train)
 
-    mlflow.sklearn.log_model(pipeline, artifact_path="model_pipeline")
-    save_artifact(pipeline, name="trained_model", artifact_type=ArtifactType.MODEL)
-    
-    model_dir = "models"
-    os.makedirs(model_dir, exist_ok=True)
-    model_path = os.path.join(model_dir, "model.pkl")
-    joblib.dump(pipeline, model_path)
-    logging.info(f"Model saved locally at {model_path}")
+        mlflow.sklearn.log_model(pipeline, artifact_path="model_pipeline")
+        save_artifact(pipeline, name="trained_model", artifact_type=ArtifactType.MODEL)
+        
+        model_dir = "models"
+        os.makedirs(model_dir, exist_ok=True)
+        model_path = os.path.join(model_dir, "model.pkl")
+        joblib.dump(pipeline, model_path)
+        logging.info(f"Model saved locally at {model_path}")
+
+        # return pipeline
+    except Exception as e:
+        logging.error(f"An error occurred during model training: {str(e)}")
+        # mlflow.end_run(status=mlflow.entities.RunStatus.FAILED)
+        raise e
+    finally:
+        # end the mlflow run
+        mlflow.end_run()
 
     return pipeline
