@@ -28,7 +28,8 @@ def training_pipeline():
     X_scaled,y = outlier_detection_step(df,target_column="vomitoxin_ppb")
     X_pca,y = pca_implementation_step(X_scaled,y,components=2,method="pca",whiten=True,svd_solver="randomized")
     X_train, X_test, y_train, y_test = split_data_step(X_pca,y)
-    model = model_building_step(model_name = "gradient",X_train= X_train,y_train=y_train,tune_hyperparameters=True)
+    model = model_building_step(model_name = "gradient_boosting",X_train= X_train,
+                                y_train=y_train,tune_hyperparameters=False,n_trials=20,X_test=X_test,y_test=y_test)
     results= model_evaluation_step(model= model,X_test=X_test,y_test= y_test)
 
     return  model
