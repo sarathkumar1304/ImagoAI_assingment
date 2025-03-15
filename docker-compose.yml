@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  # Step 1: Run Deployment
+  deployment:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: >
+      bash -c "
+      zenml init &&
+      zenml integration install mlflow -y &&
+      zenml experiment-tracker register ImagoAI_experiment_tracker --flavor=mlflow &&
+      zenml model-deployer register ImagoAI_model_deployer --flavor=mlflow &&
+      zenml stack register ImagoAI_stack -a default -o default -d ImagoAI_model_deployer -e ImagoAI_experiment_tracker --set &&
+      zenml stack set ImagoAI_stack &&
+      python3 run_pipeline.py &&
+      python3 run_deployment.py
+      "
+
+  # Step 2: Run Streamlit App
+  streamlit_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - deployment
+    ports:
+      - "8501:8501"
+    command: streamlit run app.py --server.port 8501 --server.address 0.0.0.0
