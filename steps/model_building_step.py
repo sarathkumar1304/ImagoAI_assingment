@@ -58,7 +58,7 @@ def model_building_step(
     }
     # mlflow.set_experiment(model_name)
     if not mlflow.active_run():
-        mlflow.start_run()
+        mlflow.start_run(run_name=model_name, nested=True, log_system_metrics=True)
     
     # Enable MLflow autologging
     mlflow.sklearn.autolog()
