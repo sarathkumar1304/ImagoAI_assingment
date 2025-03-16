@@ -85,7 +85,7 @@ zenml init
 zenml integration install mlflow -y
 zenml experiment-tracker register  ImagoAI_experiment_tracker_1 --flavor=mlflow
 zenml  model-deployer register ImagoAI_model_deployer_1 --flavor=mlflow
-zenml stack register -a d -o d -e ImagoAI_experiment_tracker_1 -d ImagoAI_model_deployer_1 --set
+zenml stack ImagoAI_stack register -a d -o d -e ImagoAI_experiment_tracker_1 -d ImagoAI_model_deployer_1 --set
 
 streamlit run app.py
 ```
