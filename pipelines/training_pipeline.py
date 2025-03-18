@@ -7,13 +7,11 @@ from steps.pca_implementation_step import pca_implementation_step
 from steps.model_building_step import model_building_step
 from steps.model_evaluation_step import model_evaluation_step
 from zenml import Model
-
-@pipeline(
-    model=Model(
-        name="ImagoAI-ML-Model",
-        description="Model for predicting vomitoxin levels in corn samples",
-    )
-)
+# model=Model(
+#         name="ImagoAI-ML-Model",
+#         description="Model for predicting vomitoxin levels in corn samples",
+#     )
+@pipeline(name="ML Task")
 def training_pipeline():
     """
     This pipeline is for performing a Machine Learning task of predicting the level of vomitoxin in a grain sample.

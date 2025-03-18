@@ -26,6 +26,7 @@ from typing import Annotated
 from zenml import Model
 
 experiment_tracker = Client().active_stack.experiment_tracker
+
 model = Model(
     name= "ImagoAI-ML-Model",
     description = 'Model for predicting vomitoxin levels in corn samples'
@@ -58,7 +59,7 @@ def model_building_step(
     }
     # mlflow.set_experiment(model_name)
     if not mlflow.active_run():
-        mlflow.start_run(run_name=model_name, nested=True, log_system_metrics=True)
+        mlflow.start_run()
     
     # Enable MLflow autologging
     mlflow.sklearn.autolog()
@@ -156,6 +157,7 @@ def model_building_step(
         model_path = os.path.join(model_dir, "model.pkl")
         joblib.dump(pipeline, model_path)
         logging.info(f"Model saved locally at {model_path}")
+        return pipeline
 
         # return pipeline
     except Exception as e:
@@ -166,4 +168,4 @@ def model_building_step(
         # end the mlflow run
         mlflow.end_run()
 
-    return pipeline
+    

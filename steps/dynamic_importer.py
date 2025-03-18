@@ -13,7 +13,8 @@ def dynamic_importer() -> str:
     df.drop(["hsi_id", "vomitoxin_ppb"], axis=1, inplace=True)
 
     # Select only 2 samples
-    sample_data = df.head(2)
+    sample_data = df.sample(n=2, random_state=42)  # Randomly select 2 samples
+    
 
     # Load trained PCA model
     pca = joblib.load("models/pca.pkl")
